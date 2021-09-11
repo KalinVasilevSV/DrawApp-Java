@@ -1,0 +1,61 @@
+/**
+ * RectangleShape.java
+ */
+
+package draw.Model;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+
+/**
+ * Класът правоъгълник е основен примитив, който е наследник на базовия Shape.
+ */
+public class RectangleShape extends draw.Model.Shape {
+    
+	private static int count = 0;
+	
+    public RectangleShape(Rectangle rect) {
+        super(rect);
+        this.setName("RectangleShape"+(++count));
+    }
+
+    public RectangleShape(draw.Model.RectangleShape rectangle) {
+    }
+
+    /**
+     * Проверка за принадлежност на точка point към правоъгълника.
+     * В случая на правоъгълник този метод може да не бъде пренаписван, защото
+     * Реализацията съвпада с тази на абстрактния клас Shape, който проверява
+     * дали точката е в обхващащия правоъгълник на елемента (а той съвпада с
+     * елемента в този случай).
+     */
+    @Override
+    public boolean Contains(Point point) {
+        if ( super.Contains(point) ) {
+            //  Проверка дали е в обекта само, ако точката е в обхващащия правоъгълник.
+            //  В случая на правоъгълник - директно връщаме true
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Частта, визуализираща конкретния примитив.
+     */
+    @Override
+    public void DrawSelf(Graphics grfx) {
+        super.DrawSelf(grfx);
+        Rectangle r = getRectangle();
+        Graphics2D g2 = (Graphics2D)grfx;
+        g2.setStroke(getBorderStroke());
+        g2.setColor(getFillColor());
+        g2.fillRect(r.x, r.y, r.width, r.height);
+        g2.setColor(isSelected() ? draw.Model.Shape.selectionColor : getBorderColor());
+        g2.drawRect(r.x, r.y, r.width, r.height);
+    }
+}
